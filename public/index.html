@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FM / Stable Audio 3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>FM Oscillator <span class="accent">&times;</span> Stable Audio 3</h1>
+    <p class="subtitle">A generated clip drives the carrier both as a raw audio-rate FM modulator and as a source of extracted envelopes.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>API Key</h2>
+      <label for="apiKey">Stability API key</label>
+      <div class="key-row">
+        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" />
+        <button type="button" id="toggleKeyBtn" class="secondary">Show</button>
+      </div>
+      <p class="hint">Stored only in this browser's localStorage and sent to your local server per-request. Leave blank to use STABILITY_API_KEY from .env instead.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Modulation Source</h2>
+      <div class="row">
+        <label for="presetSelect">Preset prompts</label>
+        <select id="presetSelect">
+          <option value="">Choose a preset…</option>
+        </select>
+      </div>
+
+      <label for="prompt">Prompt</label>
+      <textarea id="prompt" rows="2" placeholder="e.g. granular metallic textures with slow pulsing rhythm">granular metallic textures with a slow pulsing rhythm</textarea>
+
+      <div class="row">
+        <label for="duration">Clip length <span id="durationVal">12</span>s</label>
+        <input type="range" id="duration" min="3" max="60" step="1" value="12" />
+      </div>
+
+      <div class="row">
+        <label for="crossfade">Crossfade <span id="crossfadeVal">1.5</span>s</label>
+        <input type="range" id="crossfade" min="0.1" max="5" step="0.1" value="1.5" />
+      </div>
+
+      <button id="generateBtn">Generate Modulator Clip</button>
+      <p id="status" class="status">No clip loaded yet.</p>
+
+      <audio id="clipPreview" controls style="display:none; width:100%; margin-bottom: 0.75rem;"></audio>
+
+      <div class="row">
+        <label for="history">Clip history</label>
+        <select id="history"><option value="">(none yet)</option></select>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Carrier</h2>
+      <div class="row">
+        <label for="waveform">Waveform</label>
+        <select id="waveform">
+          <option value="sine">Sine</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="carrierFreq">Frequency <span id="carrierFreqVal">220 Hz (A3)</span></label>
+        <input type="range" id="carrierFreq" min="0" max="1" step="0.001" value="0.5" />
+      </div>
+      <div class="row checkbox-row">
+        <input type="checkbox" id="snapToNotes" />
+        <label for="snapToNotes">Snap to notes</label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>FM Depth</h2>
+      <div class="xy-pad" id="depthPad"></div>
+      <div class="xy-axis-labels"><span>Base depth &rarr;</span><span>Amplitude &rarr; depth &uarr;</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Filter</h2>
+      <div class="xy-pad" id="filterPad"></div>
+      <div class="xy-axis-labels"><span>Base cutoff &rarr;</span><span>Brightness &rarr; cutoff &uarr;</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Pan</h2>
+      <div class="xy-pad" id="panPad"></div>
+      <div class="xy-axis-labels"><span>Base pan &rarr;</span><span>Amplitude &rarr; pan &uarr;</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Output</h2>
+      <div class="row">
+        <label for="volume">Master volume <span id="volumeVal">0.60</span></label>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.6" />
+      </div>
+      <div class="transport">
+        <button id="playBtn">Play</button>
+        <button id="stopBtn">Stop</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Keyboard</h2>
+      <p class="hint">Play the carrier with your computer keyboard (click the page first so key events register):</p>
+      <p class="hint keyboard-legend">A W S E D F T G Y H U J K O L P ; &nbsp;=&nbsp; C C&#9839; D D&#9839; E F F&#9839; G G&#9839; A A&#9839; B C C&#9839; D D&#9839; E<br />Z / X shift octave down / up.</p>
+      <div class="row">
+        <label>Active note</label>
+        <div id="activeNote" class="readout-value">&mdash;</div>
+      </div>
+      <div class="row">
+        <label>Octave</label>
+        <div id="octaveVal" class="readout-value">4</div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
