@@ -1,5 +1,5 @@
 import { FmEngine } from './audio/fmEngine.js';
-import { generateClip } from './audio/stableAudioClient.js';
+import { generateClip, getMode } from './audio/stableAudioClient.js';
 import { attachKeyboardPlay } from './audio/keyboardPlay.js';
 import { freqToMidi, midiToNoteName, quantizeFreqToNote } from './audio/notes.js';
 import { createXYPad } from './xyPad.js';
@@ -42,6 +42,16 @@ apiKeyInput.addEventListener('input', () => {
   } catch {
     // ignore
   }
+});
+
+// The key hint depends on whether server.js is serving the page (proxy) or
+// the page is hosted statically (direct calls to api.stability.ai).
+getMode().then((mode) => {
+  const hint = el('keyHint');
+  if (!hint) return;
+  hint.textContent = mode === 'proxy'
+    ? "Stored only in this browser's localStorage and sent to your local server per-request. Leave blank to use STABILITY_API_KEY from .env instead."
+    : "Required here. Stored only in this browser's localStorage and sent straight to api.stability.ai from your browser. Nothing passes through any other server.";
 });
 
 toggleKeyBtn.addEventListener('click', () => {

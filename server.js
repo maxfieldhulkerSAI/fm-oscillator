@@ -22,6 +22,9 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Lets the client detect that the proxy is present (vs. a static host).
+app.get('/api/health', (req, res) => res.json({ ok: true }));
+
 app.post('/api/generate', async (req, res) => {
   const {
     prompt,
